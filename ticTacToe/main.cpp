@@ -41,6 +41,41 @@ void printTable(vector<string> r, vector< vector<string>> b){
     }
 }
 
+bool move(string in, string ch, vector< vector<string>> &b)
+{
+    for (auto row1 = 0; row1 != b.size(); row1++)
+    {
+        for (auto col = 0; col != b[row1].size(); col++)
+        {
+            if (b[row1][col] == in)
+            {
+
+                if (b[row1][col] != "X" && b[row1][col] != "O") {
+                b[row1][col] = ch;
+                return false;
+                } else {
+                cout << "Taken! Try again: ";
+                return true;
+                }
+            }
+        }
+    }
+    cout << "Invalid input! Try again: ";
+    return true;
+}
+
+bool checkFull(vector< vector<string>> &b)
+{
+    for (auto row1 = 0; row1 != b.size(); row1++) {
+        for (auto col = 0; col != b[row1].size(); col++) {
+            if (b[row1][col] != "X" && b[row1][col] != "O") {
+            return false; // Found an empty spot
+                
+            }
+        }
+    }
+    return true;
+}
 
 int main(void){
 
@@ -63,6 +98,9 @@ string input2;
     
 do
 {
+    b = { {  "1",  "2",  "3"},
+          {  "4",  "5",  "6"},
+          {  "7",  "8",  "9"} };
     do
     {
         //print table
@@ -74,21 +112,11 @@ do
         repeatU = true;
         do
         {
-            for (v2D::size_type row1 = 0; row1 != b.size(); row1++)
-            {
-                for (v1D::size_type col = 0; col != b[row1].size(); col++)
-                {
-                    if (b[row1][col] == input)
-                    {
-                        b[row1][col] = "X";
-                        repeatU = false;
-                    }
-                }
-            }
-            if (repeatU){
-                cout << "Enter a Valid Input!";
-                cin >> input;
-            }
+
+            repeatU = move(input, "X", b);
+            if (repeatU) cin >> input;
+            
+
         }while (repeatU);
         
         printTable(r, b);
@@ -104,18 +132,8 @@ do
             go = true;
         }
         
-        bool isFull = true; //Check if board is full!
-        for (v2D::size_type row1 = 0; row1 != b.size(); row1++) {
-            for (v1D::size_type col = 0; col != b[row1].size(); col++) {
-                if (b[row1][col] != "X" && b[row1][col] != "O") {
-                    isFull = false; // Found an empty spot
-                    break;
-                }
-            }
-            if (!isFull) break;
-        }
-        
-        if (isFull) {
+
+        if (checkFull(b)) {
             cout << "It's a draw!\n";
             break;
         }
@@ -130,17 +148,10 @@ do
             do
             {
                 
-                for (v2D::size_type row1 = 0; row1 != b.size(); row1++)
-                {
-                    for (v1D::size_type col = 0; col != b[row1].size(); col++)
-                    {
-                        if (b[row1][col] == input2)
-                        {
-                            b[row1][col] = "O";
-                            repeatC = false;
-                        }
-                    }
-                }
+
+            repeatC = move(input2, "O", b);
+            if (repeatC) cin >> input2;
+                
             } while (repeatC);
             winC = checkWin(b, "O");
             
