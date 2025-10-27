@@ -133,6 +133,7 @@ void playerTurn(string playerName, string mark, string archetype, vector<vector<
     cout << "\n" << playerName << " (" << archetype << ") Move!\n";
 
     if (archetype == "Alchemist" || archetype == "alchemist") {
+        cout << "An alchemist is a potions master with arcane knowledge of transfiguration! \nEvery move you can either make a regular tic-tac-toe move or swap two marks on the board\n";
         static int count = 0;
         if (count >= 2) {
             bool rOrSCheck = false;
@@ -164,6 +165,10 @@ void playerTurn(string playerName, string mark, string archetype, vector<vector<
                     cout << "It's a draw!\n";
                     goFlag = false;
                 }
+                if(checkWin(b, enemyMark)){
+                    cout << "You made your opponent win!";
+                    goFlag = false;
+                }
 
             }
         } else {
@@ -178,6 +183,24 @@ void playerTurn(string playerName, string mark, string archetype, vector<vector<
     }
 
     else if (archetype == "Paladin" || archetype == "paladin") {
+        cout << "The Paladin is a stalwart guard that can force others around the battlefield! \nEvery move you can either make a regular tic-tac-toe move or shift one existing mark to an adjacent square.\n";
+        bool rOrShCheck = false;
+        do {
+            cout << "Regular move or shift? (r/s): ";
+            cin >> rOrS;
+            if (rOrS == "r" || rOrS == "R" || rOrS == "s" || rOrS == "S")
+                rOrShCheck = true;
+        } while (!rOrShCheck);
+
+        if (rOrS == "r" || rOrS == "R") {
+            cout << "Enter your move: ";
+            cin >> input;
+            do {
+                repeat = move(input, mark, b);
+                if (repeat) cin >> input;
+            } while (repeat);
+        } else {
+        }
        
     }
     
@@ -194,7 +217,6 @@ void playerTurn(string playerName, string mark, string archetype, vector<vector<
 
 // MAIN
 int main(void){
-
 
 typedef vector<string> v1D;
 typedef vector<v1D> v2D;
@@ -237,37 +259,28 @@ cin >> rOrB;
            
         }while(!checkValidMark(markP1, " "));
         
-        
-        //mark = markk[0];
         cout << "Player 1, your mark is : " << markP1 << endl;
         
-       
-      
         do{
             cout << "Enter your desired mark (single character) Player 2: ";
             getline(cin, markP2);
            
         }while(!checkValidMark(markP2, markP1));
-        
-        //mark = markk[0];
+       
         cout << "Player 2, your mark is : " << markP2 << endl;
-        
-        
+       
         do{
-            cout << "Player 1 -- Choose an archetype: Paladin, Alchemist or Chronomage" << endl;
+            cout << "Player 1 -- Choose an archetype: Paladin Or Alchemist" << endl;
             getline(cin, archetypeP1);
         }while(!checkArchetype(archetypeP1));
         cout << "Player 1 -- You chose " << archetypeP1 << endl;
         
         do{
-            cout << "Player 2 -- Choose an archetype: Paladin, Alchemist or Chronomage" << endl;
+            cout << "Player 2 -- Choose an archetype: Paladin Or Alchemist" << endl;
             getline(cin, archetypeP2);
         }while(!checkArchetype(archetypeP2));
         cout << "Player 2 -- You chose " << archetypeP2 << endl;
         
-        if(archetypeP1 == "Alchemist" || archetypeP1 == "alchemist"){
-            cout << "An alchemist is a potions master with arcane knowledge of transfiguration! \nEvery move you can either make a regular tic-tac-toe move or swap two marks on the board\n";
-            
             b = { {  "1",  "2",  "3"},
                 {  "4",  "5",  "6"},
                 {  "7",  "8",  "9"} };
@@ -275,218 +288,21 @@ cin >> rOrB;
             do
             {
             
-           printTable(r, b);
+                printTable(r, b);
                 playerTurn("Player 1", markP1, archetypeP1, b, r, winU, go, markP2);
-//            cout << "\nPlayer 1 Move!\t";
-//                bool rOrSCheck = false;
-//                if (count >= 2){
-//                    do{
-//                        cout << "Would you like to make a regular move or swap? (r/s)";
-//                        cin >> rOrS;
-//                        if (rOrS == "R" || rOrS == "r" || rOrS == "S" || rOrS == "s"){
-//                            rOrSCheck = true;
-//                        }else {
-//                        cout << "INVALID!";
-//                        
-//                        }
-//                    }while(!rOrSCheck);
-//                    if (rOrS == "R" || rOrS == "r"){
-//                        cout << "Enter your move!";
-//                        cin >> input;
-//                        repeatU = true;
-//                        do
-//                        {
-//                            repeatU = move(input, markP1, b);
-//                            if (repeatU) cin >> input;
-//                           
-//                        }while (repeatU);
-//                        
-//                        //printTable(r, b);
-//                        winU = checkWin(b, markP1);
-//                        if (winU)
-//                        {
-//                            cout << "Player 1 wins!\n";
-//                            go = false;
-//                            printTable(r, b);
-//                            break;
-//                        }else{
-//                            
-//                            go = true;
-//                        }
-//                        
-//                        if (checkFull(b)) {
-//                            cout << "It's a draw!\n";
-//                            break;
-//                        }
-//                    }else if(rOrS == "S" || rOrS == "s"){
-//                        
-//                        do{
-//                            cout << "Enter the two you want to swap, separated by spaces please!";
-//                            cin >> num1 >> num2;
-//                           
-//                        } while(!checkValidSwap(markP1, markP2, b, num1, num2));
-//                        swapValues(num1, num2, b, r);
-//                        winU = checkWin(b, markP1);
-//                        if (winU)
-//                        {
-//                            cout << "Player 1 wins!\n";
-//                            go = false;
-//                            printTable(r, b);
-//                            break;
-//                        }else{
-//                            
-//                            go = true;
-//                        }
-//                        
-//                        if (checkFull(b)) {
-//                            cout << "It's a draw!\n";
-//                            break;
-//                        }
-//                        
-//                    }
-//                }else{
-//                    cout << "Enter your move!";
-//                    cin >> input;
-//                    repeatU = true;
-//                    do
-//                    {
-//                        repeatU = move(input, markP1, b);
-//                        if (repeatU) cin >> input;
-//                       
-//                    }while (repeatU);
-//                    
-//                    printTable(r, b);
-//                    count ++;
-//                    winU = checkWin(b, markP1);
-//                    if (winU)
-//                    {
-//                        cout << "Player 1 wins!\n";
-//                        go = false;
-//                        printTable(r, b);
-//                        break;
-//                    }else{
-//                        go = true;
-//                    }
-//                    
-//                    if (checkFull(b)) {
-//                        cout << "It's a draw!\n";
-//                        break;
-//                    }
-//                    
-//                }
-                
-             
+
                 if (go)
                 {
-                   printTable(r, b);
-                    playerTurn("Player 2", markP2, archetypeP2, b, r, winC, go, markP2);
-//                    cout << "\nPlayer 2 Move!\n";
-//                    
-//                    if (count >= 2){
-//                        rOrSCheck = false;
-//                        
-//                            do{
-//                                cout << "Would you like to make a regular move or swap? (r/s)";
-//                                cin >> rOrS;
-//                                if (rOrS == "R" || rOrS == "r" || rOrS == "S" || rOrS == "s"){
-//                                    rOrSCheck = true;
-//                                }else {
-//                                    cout << "INVALID!";
-//                                    
-//                                }
-//                            }while(!rOrSCheck);
-//                            
-//                            if (rOrS == "R" || rOrS == "r"){
-//                                cout << "Enter your move!";
-//                                cin >> input2;
-//                                repeatC = true;
-//                                do
-//                                {
-//                                    repeatC = move(input2, markP2, b);
-//                                    if (repeatC) cin >> input2;
-//                                    
-//                                }while (repeatC);
-//                                
-//                                //printTable(r, b);
-//                                winC = checkWin(b, markP2);
-//                                if (winC)
-//                                {
-//                                    cout << "Player 2 wins!\n";
-//                                    go = false;
-//                                    printTable(r, b);
-//                                    break;
-//                                }else{
-//                                    
-//                                    go = true;
-//                                }
-//                                
-//                                if (checkFull(b)) {
-//                                    cout << "It's a draw!\n";
-//                                    break;
-//                                }
-//                                
-//                            }else if(rOrS == "S" || rOrS == "s"){
-//                                
-//                                do{
-//                                    cout << "Enter the two you want to swap, separated by spaces please!";
-//                                    cin >> num1 >> num2;
-//                                    
-//                                } while(!checkValidSwap(markP1, markP2, b, num1, num2));
-//                                swapValues(num1, num2, b, r);
-//                                winC = checkWin(b, markP2);
-//                                if (winC)
-//                                {
-//                                    cout << "Player 2 wins!\n";
-//                                    go = false;
-//                                    printTable(r, b);
-//                                    break;
-//                                }else{
-//                                    go = true;
-//                                }
-//                                
-//                                if (checkFull(b)) {
-//                                    cout << "It's a draw!\n";
-//                                    break;
-//                                }
-//                                
-//                            }
-//                        }else{
-//                            cout << "Enter your move!";
-//                            cin >> input2;
-//                            repeatC = true;
-//                            do
-//                            {
-//                                repeatC = move(input2, markP2, b);
-//                                if (repeatC) cin >> input2;
-//                                
-//                            }while (repeatC);
-//                            
-//                            //printTable(r, b);
-//                            count ++;
-//                            winC = checkWin(b, markP2);
-//                            if (winC)
-//                            {
-//                                cout << "Player 2 wins!\n";
-//                                go = false;
-//                                printTable(r, b);
-//                                break;
-//                            }else{
-//                                go = true;
-//                            }
-//                            
-//                            if (checkFull(b)) {
-//                                cout << "It's a draw!\n";
-//                                break;
-//                            }
-//                            
-//                        }
+                printTable(r, b);
+                playerTurn("Player 2", markP2, archetypeP2, b, r, winC, go, markP2);
+
                         
                     }
                 
             } while (go);
             
             
-        }
+        
         
         //REGULAR
     }else if(rOrB == 'r' || rOrB == 'R') {
