@@ -124,7 +124,7 @@ void swapValues(int n1, int n2, vector< vector<string>> &b, vector<string> r){
     //printTable(r, b);
 }
 
-void playerTurn(string playerName, string mark, string archetype, vector<vector<string>>& b, vector<string>& r, bool& winFlag, bool& goFlag, string enemyMark)
+void playerTurn(string playerName, string mark, string archetype, vector<vector<string>>& b, vector<string>& r, bool& winFlag, bool& goFlag, string enemyMark, int& countA, int& countP)
 {
     string input, rOrS;
     bool repeat = true;
@@ -133,9 +133,10 @@ void playerTurn(string playerName, string mark, string archetype, vector<vector<
     cout << "\n" << playerName << " (" << archetype << ") Move!\n";
 
     if (archetype == "Alchemist" || archetype == "alchemist") {
-        cout << "An alchemist is a potions master with arcane knowledge of transfiguration! \nEvery move you can either make a regular tic-tac-toe move or swap two marks on the board\n";
-        static int count = 0;
-        if (count >= 2) {
+        //static int count = 0;
+        if (countA == 0) {cout << "An alchemist is a potions master with arcane knowledge of transfiguration! \nEvery move you can either make a regular tic-tac-toe move or swap two marks on the board\n";}
+        
+        if (countA >= 2) {
             bool rOrSCheck = false;
             do {
                 cout << "Regular move or swap? (r/s): ";
@@ -178,28 +179,40 @@ void playerTurn(string playerName, string mark, string archetype, vector<vector<
                 repeat = move(input, mark, b);
                 if (repeat) cin >> input;
             } while (repeat);
-            count++;
+            countA++;
         }
     }
 
     else if (archetype == "Paladin" || archetype == "paladin") {
         cout << "The Paladin is a stalwart guard that can force others around the battlefield! \nEvery move you can either make a regular tic-tac-toe move or shift one existing mark to an adjacent square.\n";
-        bool rOrShCheck = false;
-        do {
-            cout << "Regular move or shift? (r/s): ";
-            cin >> rOrS;
-            if (rOrS == "r" || rOrS == "R" || rOrS == "s" || rOrS == "S")
-                rOrShCheck = true;
-        } while (!rOrShCheck);
-
-        if (rOrS == "r" || rOrS == "R") {
+        //static int countP = 0;
+        if (countP >=1){
+            bool rOrShCheck = false;
+            do {
+                cout << "Regular move or shift? (r/s): ";
+                cin >> rOrS;
+                if (rOrS == "r" || rOrS == "R" || rOrS == "s" || rOrS == "S")
+                    rOrShCheck = true;
+            } while (!rOrShCheck);
+            
+            if (rOrS == "r" || rOrS == "R") {
+                cout << "Enter your move: ";
+                cin >> input;
+                do {
+                    repeat = move(input, mark, b);
+                    if (repeat) cin >> input;
+                } while (repeat);
+            } else {
+                
+            }
+        }else{
             cout << "Enter your move: ";
             cin >> input;
             do {
                 repeat = move(input, mark, b);
                 if (repeat) cin >> input;
             } while (repeat);
-        } else {
+            countP++;
         }
        
     }
@@ -240,11 +253,12 @@ typedef vector<v1D> v2D;
     bool choose = true;
     string archetypeP1;
     string archetypeP2;
-    int num1;
-    int num2;
-    int count = 0;
+    int countA = 0, countP = 0;
     
+    do{//tester
+        
     while (choose){
+        
 cout << "Regular or Battle Tic Tac Toe ? Enter r or b: \n";
 cin >> rOrB;
     
@@ -289,12 +303,12 @@ cin >> rOrB;
             {
             
                 printTable(r, b);
-                playerTurn("Player 1", markP1, archetypeP1, b, r, winU, go, markP2);
+                playerTurn("Player 1", markP1, archetypeP1, b, r, winU, go, markP2, countA, countP);
 
                 if (go)
                 {
                 printTable(r, b);
-                playerTurn("Player 2", markP2, archetypeP2, b, r, winC, go, markP2);
+                playerTurn("Player 2", markP2, archetypeP2, b, r, winC, go, markP2, countA, countP);
 
                         
                     }
@@ -308,8 +322,8 @@ cin >> rOrB;
     }else if(rOrB == 'r' || rOrB == 'R') {
         choose = false;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        do
-        {
+//        do
+//        {
             b = { {  "1",  "2",  "3"},
                 {  "4",  "5",  "6"},
                 {  "7",  "8",  "9"} };
@@ -318,6 +332,7 @@ cin >> rOrB;
                 //print table
                 printTable(r, b);
                 //repeatU = true;
+                
                 cout << "\nPlayer 1 Move!\t";
                 cin >> input;
                 
@@ -378,19 +393,40 @@ cin >> rOrB;
                 }
             } while (go);
             
-            //check to play again
-            char reply;
-            cout << "Again? (y/n)";
-            cin >> reply;
-            if (reply == 'Y' || reply == 'y')
-            {
-                again = true;
-            }else{
-                again = false;
-            }
-        }while(again);
+//            //check to play again
+//            char reply;
+//            cout << "Again? (y/n)";
+//            cin >> reply;
+//            if (reply == 'Y' || reply == 'y')
+//            {
+//                again = true;
+//            }else{
+//                again = false;
+//            }
+//        }while(again);
     }//while choose
     }// if else for battle or regular
+        
+        //check to play again
+        string reply;
+        bool yOrnCheck = false;
+        do {
+            cout << "Again? (y/n): ";
+            cin >> reply;
+            if (reply == "y" || reply == "Y" || reply == "n" || reply == "N")
+                yOrnCheck = true;
+        } while (!yOrnCheck);
+        
+        if (reply == "Y" || reply == "y")
+        {
+            again = true;
+            choose = true;
+        }else{
+            again = false;
+        }
+
+        
+    }while(again);
         cout << "Thank you for playing TicTacToe!";
     
 }
