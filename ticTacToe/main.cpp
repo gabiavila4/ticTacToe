@@ -132,17 +132,17 @@ bool checkValidShift(string M1, string M2, vector< vector<string>> b, int n1, in
         int c1 = (n1 - 1) % 3;
         int r2 = (n2 - 1) / 3;
         int c2 = (n2 - 1) % 3;
-        if((b[r1][c1] == M1 || b[r1][c1] == M2) && (b[r2][c2] != M1 && b[r2][c2] != M2))
+        if((b[r1][c1][0] == M1[0] || b[r1][c1][0] == M2[0]) && (b[r2][c2][0] != M1[0] && b[r2][c2][0] != M2[0]))
         {
             if (abs(r1 - r2) <= 1 && abs(c1 - c2) <= 1 && !(r1 == r2 && c1 == c2)){
                 return true;
             }else{
-                cout << "Enter a valid adjacent place to shift!";
+                cout << "Enter a valid adjacent place to shift!\n";
                 return false;
             }
         }else{
-            if((b[r1][c1] == M1 || b[r1][c1] == M2)) cout << "true";
-            cout << "Enter a valid marked spot and an unoccupied space to shift it to!";
+            cout << M1[0] << b[r1][c1][0] << M2[0] << b[r2][c2][0];
+            cout << "Enter a valid marked spot and an unoccupied space to shift it to!\n";
             return false;
         }
         
