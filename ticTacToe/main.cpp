@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -97,7 +98,7 @@ bool checkValidMark(string one, string two){
     }
 }
 bool checkValidSwap(string M1, string M2, vector< vector<string>> b, int n1, int n2){
-    if(n1 && n2 > 0 && n1 && n2 < 10){
+    if(n1 > 0 && n1 < 10 && n2 > 0 && n2 < 10){
         int r1 = (n1 - 1) / 3;
         int c1 = (n1 - 1) % 3;
         int r2 = (n2 - 1) / 3;
@@ -122,6 +123,56 @@ void swapValues(int n1, int n2, vector< vector<string>> &b, vector<string> r){
     b[r1][c1] = b[r2][c2];
     b[r2][c2] = temp;
     //printTable(r, b);
+}
+
+bool checkValidShift(string M1, string M2, vector< vector<string>> b, int n1, int n2){
+    if(n1 > 0 && n1 < 10 && n2 > 0 && n2 < 10){
+        
+        int r1 = (n1 - 1) / 3;
+        int c1 = (n1 - 1) % 3;
+        int r2 = (n2 - 1) / 3;
+        int c2 = (n2 - 1) % 3;
+        if((b[r1][c1] == M1 || b[r1][c1] == M2) && (b[r2][c2] != M1 && b[r2][c2] != M2))
+        {
+            if (abs(r1 - r2) <= 1 && abs(c1 - c2) <= 1 && !(r1 == r2 && c1 == c2)){
+                return true;
+            }else{
+                cout << "Enter a valid adjacent place to shift!";
+                return false;
+            }
+        }else{
+            if((b[r1][c1] == M1 || b[r1][c1] == M2)) cout << "true";
+            cout << "Enter a valid marked spot and an unoccupied space to shift it to!";
+            return false;
+        }
+        
+        return true;
+    }else{
+        cout << "Enter valid spaces within table!";
+        return false;
+    }
+    
+}
+
+void shiftValues(int n1, int n2, vector< vector<string>> &b, vector<string> r){
+    int r1 = (n1 - 1) / 3;
+    int c1 = (n1 - 1) % 3;
+    int r2 = (n2 - 1) / 3;
+    int c2 = (n2 - 1) % 3;
+    b[r2][c2] = b[r1][c1];
+    
+    vector< vector<string>> blank = { {  "1",  "2",  "3"},
+        {  "4",  "5",  "6"},
+        {  "7",  "8",  "9"} };;
+    
+    for (auto row1 = 0; row1 != b.size(); row1++) {
+        for (auto col = 0; col != b[row1].size(); col++) {
+            if(row1 == r1 && col == c1){
+                b[r1][c1] = blank[row1][col];
+            }
+        }
+    }
+    
 }
 
 void playerTurn(string playerName, string mark, string archetype, vector<vector<string>>& b, vector<string>& r, bool& winFlag, bool& goFlag, string enemyMark, int& countA, int& countP)
@@ -204,6 +255,24 @@ void playerTurn(string playerName, string mark, string archetype, vector<vector<
                 } while (repeat);
             } else {
                 
+                do {
+                    cout << "Enter the box number of what you want to shift and then where you want to shift it to, separated by spaces: ";
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin >> num1 >> num2;
+                } while (!checkValidShift(mark, enemyMark, b, num1, num2));
+                shiftValues(num1, num2, b, r);
+                winFlag = checkWin(b, mark);
+                if (winFlag) {
+                    cout << playerName << " wins!\n";
+                    goFlag = false;
+                } else if (checkFull(b)) {
+                    cout << "It's a draw!\n";
+                    goFlag = false;
+                }
+                if(checkWin(b, enemyMark)){
+                    cout << "You made your opponent win!";
+                    goFlag = false;
+                }
             }
         }else{
             cout << "Enter your move: ";
